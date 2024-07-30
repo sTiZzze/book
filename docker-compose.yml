@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  postgres:
+    container_name: book-db
+    image: postgres:12-alpine
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    volumes:
+      - ./.var/postgresql:/var/lib/postgresql/data
+    ports:
+      - "5435:5430"
+  app:
+    container_name: book-app
+    build: .
+    command: |
+      python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_HOST=postgres
