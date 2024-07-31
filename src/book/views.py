@@ -48,7 +48,6 @@ class BookView(ViewSet):
             return Response({"error": "Date format should be YYYY-MM-DD"}, status=status.HTTP_400_BAD_REQUEST)
 
         books = Book.objects.filter(created_date__range=[start_data, end_data]).order_by('-pages')
-        print(books.query)
         serializer = ReadBookSerializer(books, many=True)
         return Response(serializer.data)
 
