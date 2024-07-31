@@ -9,11 +9,11 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-import os
 import datetime
+import os
+from pathlib import Path
 
 import environ
-from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -164,3 +164,18 @@ SIMPLE_JWT = {
     'ISSUER': 'config',
     'SIGNING_KEY': env('SECRET_KEY')
 }
+
+CELERY_TIMEZONE = "UTC"
+CELERY_TASK_TIME_LIMIT = 15  # seconds
+CELERY_BROKER_URL = "redis://%s:%s" % (env('REDIS_HOST'), env('REDIS_PORT'))
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = "redis://%s:%s" % (env('REDIS_HOST'), env('REDIS_PORT'))
+CELERY_ACCEPT_CONTENT = ('application/json', )
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_IMPORTS = ('src.core.tasks',)
+
+
+EMAIL_BACKEND = env('EMAIL_BACKEND')
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')

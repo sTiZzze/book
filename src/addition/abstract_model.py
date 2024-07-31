@@ -13,4 +13,3 @@ class UpdatedAt(models.Model):
 
     class Meta:
         abstract = True
-

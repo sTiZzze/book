@@ -1,3 +1,4 @@
+from datetime import datetime
 
 from rest_framework import mixins, status
 from rest_framework.decorators import action
@@ -5,10 +6,9 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ViewSet
 
-from src.book.serializers import CreateBookSerializer, AuthorSerializer, ReadBookSerializer
-from src.book.models import Book, Author
-
-from datetime import datetime
+from src.book.models import Author, Book
+from src.book.serializers import (AuthorSerializer, CreateBookSerializer,
+                                  ReadBookSerializer)
 
 
 class BookView(ViewSet):
@@ -38,13 +38,15 @@ class BookView(ViewSet):
         end_data = request.query_params.get('end_date')
 
         if not start_data or not end_data:
-            return Response({"error": "Please provide both start_date and end_date"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Please provide both start_date and end_date"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         try:
             start_data = datetime.strptime(start_data, '%Y-%m-%d')
             end_data = datetime.strptime(end_data, '%Y-%m-%d')
         except ValueError:
             return Response({"error": "Date format should be YYYY-MM-DD"}, status=status.HTTP_400_BAD_REQUEST)
+
         books = Book.objects.filter(created_date__range=[start_data, end_data]).order_by('-pages')
         print(books.query)
         serializer = ReadBookSerializer(books, many=True)

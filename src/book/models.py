@@ -1,8 +1,9 @@
 import uuid
 
-from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
-from django.db import models
 from django.conf import settings
+from django.core.validators import (MaxValueValidator, MinValueValidator,
+                                    RegexValidator)
+from django.db import models
 
 from src.addition.abstract_model import CreatedAt, UpdatedAt
 from src.core.enums.LanguageEnum import Language
@@ -53,6 +54,3 @@ class Book(CreatedAt, UpdatedAt):
 
     def __str__(self):
         return self.name
-
-
-
